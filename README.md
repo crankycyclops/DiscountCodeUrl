@@ -10,7 +10,7 @@ https://url.to.my.store?coupon=MYDISCOUNTCODE
 
 I've only tested this on Magento 2.3 (I'm developing this primarily for my own needs but am making it open source to share with anyone who might find it useful), but it should work on 2.2 as well, and quite possibly on 2.1. If it doesn't, post an issue, and if I have time I'll take a look--although, since 2.2 is already EOL as of 2.2.10, you should probably be moving to 2.3 anyway...right? O:-)
 
-I use language features that require at least PHP 7.1, but since 7.1 is already EOL, you should be using 7.2 or above anyway ;)
+I use language features that require at least PHP 7.1, but since PHP 7.1 is already EOL, that (ideally) shouldn't be a problem for anyone.
 
 ### Installing
 
