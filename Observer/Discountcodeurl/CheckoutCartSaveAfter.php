@@ -27,6 +27,11 @@ class CheckoutCartSaveAfter implements \Magento\Framework\Event\ObserverInterfac
 	 */
 	private $cookieHelper;
 
+	/**
+	 * @var \Magento\Framework\Message\ManagerInterface
+	 */
+	private $messageManager;
+
 	/************************************************************************/
 
 	/**
@@ -37,11 +42,13 @@ class CheckoutCartSaveAfter implements \Magento\Framework\Event\ObserverInterfac
 	public function __construct(
 		\Crankycyclops\DiscountCodeUrl\Helper\Config $config,
 		\Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-		\Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
+		\Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper,
+		\Magento\Framework\Message\ManagerInterface $messageManager
 	) {
 		$this->config = $config;
 		$this->quoteRepository = $quoteRepository;
 		$this->cookieHelper = $cookieHelper;
+		$this->messageManager = $messageManager;
 	}
 
 	/************************************************************************/
@@ -65,8 +72,30 @@ class CheckoutCartSaveAfter implements \Magento\Framework\Event\ObserverInterfac
 				$cart = $observer->getData('cart');
 
 				if ($cart) {
-					$cart->getQuote()->setCouponCode($coupon);
-					$this->quoteRepository->save($cart->getQuote()->collectTotals());
+
+					try {
+						$cart->getQuote()->setCouponCode($coupon);
+						$this->quoteRepository->save($cart->getQuote()->collectTotals());
+					}
+
+					catch (LocalizedException $e) {
+						$this->messageManager->addError(
+							__("Discount code <strong>$coupon</strong> couldn't be applied: " .
+								$e->getMessage())
+						);
+					}
+
+					catch (\Exception $e) {
+						$this->messageManager->addError(
+							__("Discount code <strong>$coupon</strong> couldn't be applied or is invalid")
+						);
+					}
+
+					if ($cart->getQuote()->getCouponCode() != $coupon) {
+						$this->messageManager->addError(
+							__("Discount code <strong>$coupon</strong> is invalid. Verify that it's correct and try again.")
+						);
+					}
 				}
 			}
 		}
