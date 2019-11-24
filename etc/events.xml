@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<!--
+	@category  Crankycyclops
+	@package   Crankycyclops_DiscountCodeUrl
+	@author    James Colannino
+	@copyright Copyright (c) 2019 James Colannino
+	@license   https://www.gnu.org/licenses/gpl-3.0.en.html GPL v3
+ -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+	<event name="checkout_cart_save_after">
+		<observer name="crankycyclops_discountcodeurl_checkout_cart_save_after" instance="Crankycyclops\DiscountCodeUrl\Observer\Discountcodeurl\CheckoutCartSaveAfter" />
+	</event>
+
+	<event name="sales_order_place_after">
+		<observer name="crankycyclops_discountcodeurl_sales_order_place_after" instance="Crankycyclops\DiscountCodeUrl\Observer\Discountcodeurl\SalesOrderPlaceAfter" />
+	</event>
+
+</config>
+

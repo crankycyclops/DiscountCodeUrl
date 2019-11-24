@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<!--
+	@category  Crankycyclops
+	@package   Crankycyclops_DiscountCodeUrl
+	@author    James Colannino
+	@copyright Copyright (c) 2019 James Colannino
+	@license   https://www.gnu.org/licenses/gpl-3.0.en.html GPL v3
+ -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+
+	<system>
+
+		<section id="promo">
+
+			<group id="discounturl" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+
+				<label>Discount URL Settings</label>
+
+				<field id="enabled" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enabled</label>
+					<comment>If the discount URL module is enabled, you'll be able to apply discount codes automatically via URL. Disable this if you have other modules running that implement similar behavior or that might conflict.</comment>
+					<validate>required-entry</validate>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+
+				<field id="url_param" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>URL Parameter</label>
+					<comment>This is the GET parameter that will contain a coupon code in the URL. For example, if this value is "coupon", then https://store.url?coupon=CODE will set the coupon code to "CODE." If this value isn't set, we'll use the hardcoded default specified by Helper\Cookie::DEFAULT_URL_PARAMETER.</comment>
+				</field>
+
+				<field id="cookie_lifetime" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Cookie Lifetime</label>
+					<comment>When a coupon code comes in through a URL, we set it in a cookie so that we can remember it for the entire session. This value determines how long that cookie should stay set before it expires (in seconds.) Value must be 0 or greater (0 means the cookie will remain alive until the browser window or tab remains open.) If this value isn't set, we'll use the hardcoded default specified by Helper\Cookie::COOKIE_LIFETIME.</comment>
+					<validate>validate-zero-or-greater</validate>
+				</field>
+
+			</group>
+
+		</section>
+
+	</system>
+
+</config>
