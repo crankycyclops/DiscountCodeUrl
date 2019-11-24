@@ -13,6 +13,11 @@ namespace Crankycyclops\DiscountCodeUrl\Observer\Discountcodeurl;
 class SalesOrderPlaceAfter implements \Magento\Framework\Event\ObserverInterface {
 
 	/**
+	 * @var \Crankycyclops\DiscountCodeUrl\Helper\Config
+	 */
+	private $config;
+
+	/**
 	 * @var \Crankycyclops\DiscountCodeUrl\Helper\Cookie
 	 */
 	private $cookieHelper;
@@ -25,8 +30,10 @@ class SalesOrderPlaceAfter implements \Magento\Framework\Event\ObserverInterface
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
 	 */
 	public function __construct(
+		\Crankycyclops\DiscountCodeUrl\Helper\Config $config,
 		\Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
 	) {
+		$this->config = $config;
 		$this->cookieHelper = $cookieHelper;
 	}
 

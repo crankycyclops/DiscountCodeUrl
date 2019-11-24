@@ -13,6 +13,11 @@ namespace Crankycyclops\DiscountCodeUrl\Observer\Discountcodeurl;
 class CheckoutCartSaveAfter implements \Magento\Framework\Event\ObserverInterface {
 
 	/**
+	 * @var \Crankycyclops\DiscountCodeUrl\Helper\Config
+	 */
+	private $config;
+
+	/**
 	 * @var \Magento\Quote\Api\CartRepositoryInterface
 	 */
 	private $quoteRepository;
@@ -30,9 +35,11 @@ class CheckoutCartSaveAfter implements \Magento\Framework\Event\ObserverInterfac
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
 	 */
 	public function __construct(
+		\Crankycyclops\DiscountCodeUrl\Helper\Config $config,
 		\Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
 		\Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
 	) {
+		$this->config = $config;
 		$this->quoteRepository = $quoteRepository;
 		$this->cookieHelper = $cookieHelper;
 	}
