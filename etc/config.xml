@@ -18,7 +18,7 @@
 
 				<enabled>0</enabled>
 				<url_param>coupon</url_param>
-				<cookie_lifetime>1</cookie_lifetime>
+				<cookie_lifetime>0</cookie_lifetime>
 
 			</discounturl>
 
