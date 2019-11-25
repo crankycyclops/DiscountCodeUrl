@@ -48,6 +48,7 @@ class FrontControllerInterface {
 	 * Constructor
 	 *
 	 * @param \Magento\Framework\App\RequestInterface $request
+	 * @param \Magento\Framework\UrlInterface $url
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Config $config
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
 	 * @param \Magento\SalesRule\Model\Coupon $couponModel
@@ -84,8 +85,31 @@ class FrontControllerInterface {
 
 		if ($this->config->isEnabled()) {
 
+			$queryParameter = $this->config->getUrlParameter();
+
 			// Discount code passed through the URL via query string
-			$coupon = $this->request->getParam($this->config->getUrlParameter());
+			$coupon = $this->request->getParam($queryParameter);
+
+			// If the coupon code didn't come in via a query string, check to
+			// see if it was tacked onto the end of the URL.
+			if (!$coupon && $this->config->isUrlPathEnabled()) {
+
+				$requestPath = $this->request->getPathInfo();
+
+				// If a coupon code was included in the URL, fix the URL
+				// after extracting it so that we can continue to route normally
+				if (preg_match("#/$queryParameter/([^/]+?)/*$#", $requestPath, $matches)) {
+
+					$coupon = $matches[1];
+					$realPath = str_replace($matches[0], '', $requestPath);
+
+					if (!$realPath) {
+						$realPath = '/';
+					}
+
+					$this->request->setPathInfo($realPath);
+				}
+			}
 
 			if ($coupon) {
 

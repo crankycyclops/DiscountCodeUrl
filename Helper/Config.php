@@ -48,6 +48,11 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	public const URL_PARAMETER_CONFIG_PATH = 'promo/discounturl/url_param';
 
 	/**
+	 * @var PATH_ENABLED_PATH Whether or not to apply discount codes via the URL path
+	 */
+	public const URL_PATH_ENABLED_PATH = 'promo/discounturl/url_path_enabled';
+
+	/**
 	 * @var COOKIE_LIFETIME_CONFIG_PATH How long the cookie should last
 	 */
 	public const COOKIE_LIFETIME_CONFIG_PATH = 'promo/discounturl/cookie_lifetime';
@@ -86,6 +91,26 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 
 		$value = $this->scopeConfig->getValue(
 			self::ENABLED_CONFIG_PATH,
+			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+			$scope
+		);
+
+		return is_null($value) || '0' == $value ? false : true;
+	}
+
+	/************************************************************************/
+
+	/**
+	 * Returns whether or not the URL path feature is enabled.
+	 *
+	 * @param string|int $scope
+	 *
+	 * @return bool
+	 */
+	public function isUrlPathEnabled($scope = 'default'): bool {
+
+		$value = $this->scopeConfig->getValue(
+			self::URL_PATH_ENABLED_PATH,
 			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
 			$scope
 		);
