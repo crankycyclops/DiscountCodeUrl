@@ -1,8 +1,8 @@
 # Discount Code URL Module for Magento 2
 
-This module allows discount codes to be applied to a browser session automatically via a GET parameter in the URL. For example:
+This module allows discount codes to be applied to a browser session automatically either via a query string. For example, with the default settings, the following will make sure the MYDISCOUNTCODE coupon is applied during checkout:
 
-https://url.to.my.store?coupon=MYDISCOUNTCODE
+https://url.to.my.store?discount=MYDISCOUNTCODE
 
 ## Getting Started
 

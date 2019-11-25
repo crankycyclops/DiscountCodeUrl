@@ -17,7 +17,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 *
 	 * @var DEFAULT_URL_PARAMETER URL parameter containing the coupon code
 	 */
-	public const DEFAULT_URL_PARAMETER = 'coupon';
+	public const DEFAULT_URL_PARAMETER = 'discount';
 
 	/**
 	 * When a code is supplied via the URL, a cookie is set that allows us to

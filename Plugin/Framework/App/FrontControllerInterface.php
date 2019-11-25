@@ -48,7 +48,11 @@ class FrontControllerInterface {
 	 * Constructor
 	 *
 	 * @param \Magento\Framework\App\RequestInterface $request
+	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Config $config
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
+	 * @param \Magento\SalesRule\Model\Coupon $couponModel
+	 * @param \Magento\SalesRule\Model\Rule $ruleModel
+	 * @param \Magento\Framework\Message\ManagerInterface $messageManager
 	 */
 	public function __construct(
 		\Magento\Framework\App\RequestInterface $request,
@@ -80,13 +84,14 @@ class FrontControllerInterface {
 
 		if ($this->config->isEnabled()) {
 
+			// Discount code passed through the URL via query string
 			$coupon = $this->request->getParam($this->config->getUrlParameter());
 
-			$invalidMessage = "Discount code <strong>$coupon</strong> is invalid";
-			$expiredMessage = "Unfortunately, the <strong>$coupon</strong> discount code is expired";
-			$consumedMessage = "Unfortunately, the <strong>$coupon</strong> discount code has been fully consumed";
-
 			if ($coupon) {
+
+				$invalidMessage = "Discount code <strong>$coupon</strong> is invalid";
+				$expiredMessage = "Unfortunately, the <strong>$coupon</strong> discount code is expired";
+				$consumedMessage = "Unfortunately, the <strong>$coupon</strong> discount code has been fully consumed";
 
 				$this->couponModel->loadByCode($coupon);
 
