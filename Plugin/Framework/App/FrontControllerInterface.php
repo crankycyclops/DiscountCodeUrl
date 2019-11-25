@@ -91,8 +91,16 @@ class FrontControllerInterface {
 			$coupon = $this->request->getParam($queryParameter);
 
 			// If the coupon code didn't come in via a query string, check to
-			// see if it was tacked onto the end of the URL.
-			if (!$coupon && $this->config->isUrlPathEnabled()) {
+			// see if it was tacked onto the end of the URL. This will only
+			// function if your implementation of RequestInterface has
+			// implemented the setPathInfo method (in most cases, this
+			// should be true, but the interface doesn't require it to be
+			// implemented, so better safe than sorry!)
+			if (
+				!$coupon &&
+				$this->config->isUrlPathEnabled() &&
+				method_exists($this->request, 'setPathInfo')
+			) {
 
 				$requestPath = $this->request->getPathInfo();
 
