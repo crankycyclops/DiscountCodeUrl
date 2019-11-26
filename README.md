@@ -32,7 +32,7 @@ I don't have this setup via composer yet, so if you want to install it, you'll h
 
 ```
 mkdir -p /path/to/store/app/code/Crankycyclops
-cd https://github.com/crankycyclops/DiscountCodeUrl.git
+cd /path/to/store/app/code/Crankycyclops
 git clone https://github.com/crankycyclops/DiscountCodeUrl.git
 /path/to/store/bin/magento module:enable Crankycyclops_DiscountCodeUrl
 /path/to/store/bin/magento setup:upgrade
