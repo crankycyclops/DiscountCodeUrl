@@ -13,6 +13,7 @@ This URL will apply the discount code MYDISCOUNTCODE to the session and route in
 The query string parameter and URL path can be configured via the URL Parameter admin setting. By default, this has a value of "discount", but if you change it to, say, "coupon", then the following URLs will apply the code to the session instead:
 
 https://url.to.my.store?coupon=MYDISCOUNTCODE
+
 https://url.to.my.store/path/to/page/coupon/MYDISCOUNTCODE (if the URL Path feature is turned on)
 
 You can set the lifetime of the discount code cookie in the admin via the Cookie Lifetime setting. By default this is 0, which means the cookie will survive and the browser will remember the coupon until the window or tab is closed. A value greater than 0 will indicate the number of seconds that the coupon should be remembered (for example, 3600 would mean that the coupon will be remembered for an hour.)
