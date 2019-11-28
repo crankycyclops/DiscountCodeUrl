@@ -42,6 +42,16 @@ It's also a good idea to clear your cache.
 
 Config options can be found in Stores -> Configuration -> Customers -> Promotions -> Discount URL Settings
 
+## Known Issues
+
+There's a really annoying bug that I'm trying to track down. I believe it's something happening in Magento core, but I can't prove that yet. Basically what happens is, the first time a discount code URL is used, the cookie header isn't sent, and so the cookie doesn't get set and the discount code doesn't get remembered. On the second request, however, and every request after, the cookie header is sent as it should be.
+
+This is a server side issue, not something on the client side. If, for example, you request http://store.url/path/to/page/discount/TESTCODE in one browser, the cookie header won't be sent. Then, if you request that exact same URL in another browser, the cookie will be set, even though it's the first time the page has been requested in that other browser.
+
+It's a really weird issue, and right now, I'm kind of at a loss. For now, to work around this issue, you can "prime" the module by requesting coupon code URLs you know you're going to share at least once. Doing so will ensure that the next time someone browses to that URL, the module works as expected.
+
+I'm working on it...
+
 ## Authors
 
 James Colannino - [crankycyclops](https://github.com/crankycyclops)
