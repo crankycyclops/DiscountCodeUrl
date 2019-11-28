@@ -78,7 +78,7 @@ class Cookie {
 		$metadata->setHttpOnly(false);
 
 		if ($cookieLifetime > 0) {
-			$metadata->setDuration(3600);
+			$metadata->setDuration($cookieLifetime);
 		}
 
 		$this->cookieManager->setPublicCookie(
