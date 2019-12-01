@@ -38,9 +38,9 @@ class FrontControllerInterface {
 	private $ruleModel;
 
 	/**
-	 * @var \Magento\Framework\Message\ManagerInterface
+	 * @var \Magento\Framework\Registry $registry
 	 */
-	private $messageManager;
+	private $registry;
 
 	/************************************************************************/
 
@@ -48,12 +48,11 @@ class FrontControllerInterface {
 	 * Constructor
 	 *
 	 * @param \Magento\Framework\App\RequestInterface $request
-	 * @param \Magento\Framework\UrlInterface $url
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Config $config
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
 	 * @param \Magento\SalesRule\Model\Coupon $couponModel
 	 * @param \Magento\SalesRule\Model\Rule $ruleModel
-	 * @param \Magento\Framework\Message\ManagerInterface $messageManager
+	 * @param \Magento\Framework\Registry $registry
 	 */
 	public function __construct(
 		\Magento\Framework\App\RequestInterface $request,
@@ -61,14 +60,14 @@ class FrontControllerInterface {
 		\Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper,
 		\Magento\SalesRule\Model\Coupon $couponModel,
 		\Magento\SalesRule\Model\Rule $ruleModel,
-		\Magento\Framework\Message\ManagerInterface $messageManager
+		\Magento\Framework\Registry $registry
 	) {
 		$this->request = $request;
 		$this->config = $config;
 		$this->cookieHelper = $cookieHelper;
 		$this->couponModel = $couponModel;
 		$this->ruleModel = $ruleModel;
-		$this->messageManager = $messageManager;
+		$this->registry = $registry;
 	}
 
 	/************************************************************************/
@@ -144,17 +143,26 @@ class FrontControllerInterface {
 
 						// Discount code is expired
 						if ($expirationDay && strtotime($expirationDay) < $today) {
-							$this->messageManager->addError(__($expiredMessage));
+							$this->registry->register('crankycyclops_discounturl_message', [
+								'message' => __($expiredMessage),
+								'error' => true
+							]);
 						}
 
 						// Discount hasn't started yet
 						else if ($startDay && strtotime($startDay) > $today) {
-							$this->messageManager->addError(__($invalidMessage));
+							$this->registry->register('crankycyclops_discounturl_message', [
+								'message' => __($invalidMessage),
+								'error' => true
+							]);
 						}
 
 						// Coupon has already been fully consumed
 						else if ($maxUses && $numUses >= $maxUses) {
-							$this->messageManager->addError(__($consumedMessage));
+							$this->registry->register('crankycyclops_discounturl_message', [
+								'message' => __($consumedMessage),
+								'error' => true
+							]);
 						}
 
 						else {
@@ -172,18 +180,38 @@ class FrontControllerInterface {
 								$successMessage .= " per customer)";
 							}
 
-							$this->cookieHelper->setCookie($coupon);
-							$this->messageManager->addSuccess(__($successMessage));
+							// As documented in
+							// \Magento\Framework\App\Http::launch()
+							// around line 150, I can't actually set a
+							// cookie until after the request is
+							//  dispatched and the result is rendered.
+							// Thus, I save this coupon code in the
+							// registry and actually set the cookie in an
+							// observer that listens for
+							// controller_front_send_response_before. You
+							// don't know how many hours I pulled my hair
+							// out figuring this out...
+							$this->registry->register('crankycyclops_discounturl_coupon', $coupon);
+							$this->registry->register('crankycyclops_discounturl_message', [
+								'message' => __($successMessage),
+								'error' => false
+							]);
 						}
 					}
 
 					else {
-						$this->messageManager->addError(__($invalidMessage));
+						$this->registry->register('crankycyclops_discounturl_message', [
+							'message' => __($invalidMessage),
+							'error' => true
+						]);
 					}
 				}
 
 				else {
-					$this->messageManager->addError(__($invalidMessage));
+					$this->registry->register('crankycyclops_discounturl_message', [
+						'message' => __($invalidMessage),
+						'error' => true
+					]);
 				}
 			}
 		}

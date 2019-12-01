@@ -10,6 +10,10 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
 
+	<event name="controller_front_send_response_before">
+		<observer name="crankycyclops_discountcodeurl_controller_front_send_response_before" instance="Crankycyclops\DiscountCodeUrl\Observer\Discountcodeurl\ControllerFrontSendResponseBefore" />
+	</event>
+
 	<event name="checkout_cart_save_after">
 		<observer name="crankycyclops_discountcodeurl_checkout_cart_save_after" instance="Crankycyclops\DiscountCodeUrl\Observer\Discountcodeurl\CheckoutCartSaveAfter" />
 	</event>
