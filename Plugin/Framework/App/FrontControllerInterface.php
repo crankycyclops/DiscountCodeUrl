@@ -28,6 +28,11 @@ class FrontControllerInterface {
 	private $cookieHelper;
 
 	/**
+	 * @var \Crankycyclops\DiscountCodeUrl\Helper\Cart
+	 */
+	private $cartHelper;
+
+	/**
 	 * @var \Magento\SalesRule\Model\Coupon
 	 */
 	private $couponModel;
@@ -42,6 +47,11 @@ class FrontControllerInterface {
 	 */
 	private $registry;
 
+	/**
+	 * @var \Magento\Checkout\Model\Session
+	 */
+	private $checkoutSession;
+
 	/************************************************************************/
 
 	/**
@@ -50,24 +60,30 @@ class FrontControllerInterface {
 	 * @param \Magento\Framework\App\RequestInterface $request
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Config $config
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
+	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cart $cartHelper
 	 * @param \Magento\SalesRule\Model\Coupon $couponModel
 	 * @param \Magento\SalesRule\Model\Rule $ruleModel
 	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Checkout\Model\Session $checkoutSession
 	 */
 	public function __construct(
 		\Magento\Framework\App\RequestInterface $request,
 		\Crankycyclops\DiscountCodeUrl\Helper\Config $config,
 		\Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper,
+		\Crankycyclops\DiscountCodeUrl\Helper\Cart $cartHelper,
 		\Magento\SalesRule\Model\Coupon $couponModel,
 		\Magento\SalesRule\Model\Rule $ruleModel,
-		\Magento\Framework\Registry $registry
+		\Magento\Framework\Registry $registry,
+		\Magento\Checkout\Model\Session $checkoutSession
 	) {
 		$this->request = $request;
 		$this->config = $config;
 		$this->cookieHelper = $cookieHelper;
+		$this->cartHelper = $cartHelper;
 		$this->couponModel = $couponModel;
 		$this->ruleModel = $ruleModel;
 		$this->registry = $registry;
+		$this->checkoutSession = $checkoutSession;
 	}
 
 	/************************************************************************/
@@ -215,6 +231,42 @@ class FrontControllerInterface {
 				}
 			}
 		}
+	}
+
+	/************************************************************************/
+
+	/**
+	 * If a quote already exists, we need to apply the discount code to it
+	 * automatically (if possible) and before the response is rendered. This
+	 * covers us in the case that a user applies a discount code to the URL
+	 * after having a cart that's already full (which means the save cart
+	 * observer won't execute and therefore won't update the quote's price.) I
+	 * can't do this in beforeDispatch, because based on my own testing, it
+	 * seems that the session classes don't get populated until after
+	 * FrontController::dispatch() finishes.
+	 *
+	 * @param \Magento\Framework\App\FrontControllerInterface $subject (not used)
+	 * @param ResponseInterface|ResultInterface Return value of FrontController::dispatch()
+	 *
+	 * @return ResponseInterface|ResultInterface
+	 */
+	public function afterDispatch(\Magento\Framework\App\FrontControllerInterface $subject, $result) {
+
+		if ($this->config->isEnabled()) {
+
+			// If a quote already exists, apply the
+			// discount automatically (if possible)
+			$coupon = $this->registry->registry('crankycyclops_discounturl_coupon');
+
+			if ($coupon && $this->checkoutSession->hasQuote()) {
+				$this->cartHelper->applyCoupon(
+					$this->checkoutSession->getQuote(),
+					$coupon
+				);
+			}
+		}
+
+		return $result;
 	}
 }
 

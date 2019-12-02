@@ -18,44 +18,40 @@ class CheckoutCartSaveAfter implements \Magento\Framework\Event\ObserverInterfac
 	private $config;
 
 	/**
-	 * @var \Magento\Quote\Api\CartRepositoryInterface
-	 */
-	private $quoteRepository;
-
-	/**
 	 * @var \Crankycyclops\DiscountCodeUrl\Helper\Cookie
 	 */
 	private $cookieHelper;
 
 	/**
-	 * @var \Magento\Framework\Message\ManagerInterface
+	 * @var \Crankycyclops\DiscountCodeUrl\Helper\Cart
 	 */
-	private $messageManager;
+	private $cartHelper;
 
 	/************************************************************************/
 
 	/**
 	 * Constructor
 	 *
+	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Config $config
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper
+	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cart $cartHelper
 	 */
 	public function __construct(
 		\Crankycyclops\DiscountCodeUrl\Helper\Config $config,
-		\Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
 		\Crankycyclops\DiscountCodeUrl\Helper\Cookie $cookieHelper,
-		\Magento\Framework\Message\ManagerInterface $messageManager
+		\Crankycyclops\DiscountCodeUrl\Helper\Cart $cartHelper
 	) {
 		$this->config = $config;
-		$this->quoteRepository = $quoteRepository;
 		$this->cookieHelper = $cookieHelper;
-		$this->messageManager = $messageManager;
+		$this->cartHelper = $cartHelper;
 	}
 
 	/************************************************************************/
 
 	/**
 	 * If a coupon code was set in the URL at any point during the session,
-	 * apply it as soon as the cart is created.
+	 * apply it as soon as the cart is created and re-apply it every time it's
+	 * updated to keep the total price current.
 	 *
 	 * @param \Magento\Framework\Event\Observer $observer
 	 *
@@ -72,30 +68,7 @@ class CheckoutCartSaveAfter implements \Magento\Framework\Event\ObserverInterfac
 				$cart = $observer->getData('cart');
 
 				if ($cart) {
-
-					try {
-						$cart->getQuote()->setCouponCode($coupon);
-						$this->quoteRepository->save($cart->getQuote()->collectTotals());
-					}
-
-					catch (LocalizedException $e) {
-						$this->messageManager->addError(
-							__("Discount code <strong>$coupon</strong> couldn't be applied: " .
-								$e->getMessage())
-						);
-					}
-
-					catch (\Exception $e) {
-						$this->messageManager->addError(
-							__("Discount code <strong>$coupon</strong> couldn't be applied or is invalid")
-						);
-					}
-
-					if ($cart->getQuote()->getCouponCode() != $coupon) {
-						$this->messageManager->addError(
-							__("Discount code <strong>$coupon</strong> is invalid. Verify that it's correct and try again.")
-						);
-					}
+					$this->cartHelper->applyCoupon($cart->getQuote(), $coupon);
 				}
 			}
 		}
