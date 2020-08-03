@@ -1,0 +1,29 @@
+{
+    "name": "crankycyclops/m2-module-discount-code-url",
+    "description": "",
+    "require": {
+        "php": "~7.0.0",
+        "magento/magento-composer-installer": "*"
+    },
+    "suggest": {
+    },
+    "type": "magento2-module",
+    "license": [
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Crankycyclops\\DiscountCodeUrl\\": ""
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Crankycyclops/DiscountCodeUrl"
+            ]
+        ]
+    }
+}
