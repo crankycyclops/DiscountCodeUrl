@@ -28,12 +28,10 @@ I use language features that require at least PHP 7.1, but since PHP 7.1 is alre
 
 ### Installing
 
-I don't have this setup via composer yet, so if you want to install it, you'll have to do something akin to the following steps:
+The module can be installed via composer:
 
 ```
-mkdir -p /path/to/store/app/code/Crankycyclops
-cd /path/to/store/app/code/Crankycyclops
-git clone https://github.com/crankycyclops/DiscountCodeUrl.git
+composer require crankycyclops/m2-module-discount-code-url
 /path/to/store/bin/magento module:enable Crankycyclops_DiscountCodeUrl
 /path/to/store/bin/magento setup:upgrade
 ```
