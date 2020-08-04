@@ -1,14 +1,15 @@
 {
     "name": "crankycyclops/m2-module-discount-code-url",
-    "description": "",
+    "description": "Allows discount codes to be applied to a browser session automatically via a query string or URL path.",
     "require": {
-        "php": "~7.0.0",
+        "php": "~7.1|~7.2|~7.3",
         "magento/magento-composer-installer": "*"
     },
     "suggest": {
     },
     "type": "magento2-module",
     "license": [
+        "GPL-3.0-or-later"
     ],
     "autoload": {
         "files": [
