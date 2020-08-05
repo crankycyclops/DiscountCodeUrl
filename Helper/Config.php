@@ -57,27 +57,6 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 */
 	public const COOKIE_LIFETIME_CONFIG_PATH = 'promo/discounturl/cookie_lifetime';
 
-	/**
-	 * @var \Magento\Framework\App\Config\ScopeConfigInterface
-	 */
-	public $scopeConfig;
-
-	/************************************************************************/
-
-	/**
-	 * Constructor
-	 *
-	 * @param \Magento\Framework\App\Helper\Context $context
-	 * @param \Magento\Framework\Module\ModuleListInterface $moduleList
-	 */
-	public function __construct(
-		\Magento\Framework\App\Helper\Context $context,
-		\Magento\Framework\Module\ModuleListInterface $moduleList
-	) {
-		$this->scopeConfig = $context->getScopeConfig();
-		parent::__construct($context);
-	}
-
 	/************************************************************************/
 
 	/**
@@ -87,15 +66,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 *
 	 * @return bool
 	 */
-	public function isEnabled($scope = 'default'): bool {
+	public function isEnabled(): bool {
 
-		$value = $this->scopeConfig->getValue(
-			self::ENABLED_CONFIG_PATH,
-			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-			$scope
-		);
-
-		return is_null($value) || '0' == $value ? false : true;
+		return $this->scopeConfig->isSetFlag(self::ENABLED_CONFIG_PATH);
 	}
 
 	/************************************************************************/
@@ -107,15 +80,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 *
 	 * @return bool
 	 */
-	public function isUrlPathEnabled($scope = 'default'): bool {
+	public function isUrlPathEnabled(): bool {
 
-		$value = $this->scopeConfig->getValue(
-			self::URL_PATH_ENABLED_PATH,
-			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-			$scope
-		);
-
-		return is_null($value) || '0' == $value ? false : true;
+		return $this->scopeConfig->isSetFlag(self::URL_PATH_ENABLED_PATH);
 	}
 
 	/************************************************************************/
@@ -127,14 +94,9 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 *
 	 * @return string
 	 */
-	public function getUrlParameter($scope = 'default'): string {
+	public function getUrlParameter(): string {
 
-		$value = $this->scopeConfig->getValue(
-			self::URL_PARAMETER_CONFIG_PATH,
-			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-			$scope
-		);
-
+		$value = $this->scopeConfig->getValue(self::URL_PARAMETER_CONFIG_PATH);
 		return is_null($value) || '' === $value ? self::DEFAULT_URL_PARAMETER : $value;
 	}
 
@@ -147,15 +109,10 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 *
 	 * @return int
 	 */
-	public function getCookieLifetime($scope = 'default'): int {
+	public function getCookieLifetime(): int {
 
-		$value = $this->scopeConfig->getValue(
-			self::COOKIE_LIFETIME_CONFIG_PATH,
-			\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-			$scope
-		);
-
-		return is_null($value) || '' === $value ? self::DEFAULT_COOKIE_LIFETIME : $value;
+		$value = $this->scopeConfig->getValue(self::COOKIE_LIFETIME_CONFIG_PATH);
+		return (int) (is_null($value) || '' === $value ? self::DEFAULT_COOKIE_LIFETIME : $value);
 	}
 
 	/************************************************************************/
