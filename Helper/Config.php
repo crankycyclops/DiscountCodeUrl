@@ -68,7 +68,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 */
 	public function isEnabled(): bool {
 
-        return $this->scopeConfig->isSetFlag(self::ENABLED_CONFIG_PATH);
+		return $this->scopeConfig->isSetFlag(self::ENABLED_CONFIG_PATH);
 	}
 
 	/************************************************************************/
@@ -82,7 +82,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 */
 	public function isUrlPathEnabled(): bool {
 
-        return $this->scopeConfig->isSetFlag(self::URL_PATH_ENABLED_PATH);
+		return $this->scopeConfig->isSetFlag(self::URL_PATH_ENABLED_PATH);
 	}
 
 	/************************************************************************/
@@ -96,8 +96,8 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 */
 	public function getUrlParameter(): string {
 
-        $value = $this->scopeConfig->getValue(self::URL_PARAMETER_CONFIG_PATH);
-        return is_null($value) || '' === $value ? self::DEFAULT_URL_PARAMETER : $value;
+		$value = $this->scopeConfig->getValue(self::URL_PARAMETER_CONFIG_PATH);
+		return is_null($value) || '' === $value ? self::DEFAULT_URL_PARAMETER : $value;
 	}
 
 	/************************************************************************/
@@ -111,15 +111,15 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper {
 	 */
 	public function getCookieLifetime(): int {
 
-        $value = $this->scopeConfig->getValue(self::COOKIE_LIFETIME_CONFIG_PATH);
-        return (int) (is_null($value) || '' === $value ? self::DEFAULT_COOKIE_LIFETIME : $value);
+		$value = $this->scopeConfig->getValue(self::COOKIE_LIFETIME_CONFIG_PATH);
+		return (int) (is_null($value) || '' === $value ? self::DEFAULT_COOKIE_LIFETIME : $value);
 	}
 
 	/************************************************************************/
 
 	public function getCookieName(): string {
 
-        return self::COUPON_COOKIE_NAME;
+		return self::COUPON_COOKIE_NAME;
 	}
 }
 
