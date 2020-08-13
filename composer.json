@@ -18,13 +18,5 @@
         "psr-4": {
             "Crankycyclops\\DiscountCodeUrl\\": ""
         }
-    },
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Crankycyclops/DiscountCodeUrl"
-            ]
-        ]
     }
 }
