@@ -10,6 +10,8 @@
 
 namespace Crankycyclops\DiscountCodeUrl\Plugin\Framework\App;
 
+use Magento\Framework\App\Action\Context;
+
 class FrontControllerInterface {
 
 	/**
@@ -43,14 +45,24 @@ class FrontControllerInterface {
 	private $ruleModel;
 
 	/**
-	 * @var \Magento\Framework\Registry $registry
-	 */
-	private $registry;
-
-	/**
 	 * @var \Magento\Checkout\Model\Session
 	 */
 	private $checkoutSession;
+
+    /**
+     * @var string
+     */
+	private $discounturlCoupon;
+
+    /**
+     * @var string
+     */
+	private $discounturlMessage;
+
+    /**
+     * @var bool
+     */
+    private $discounturlError = false;
 
 	/************************************************************************/
 
@@ -63,7 +75,6 @@ class FrontControllerInterface {
 	 * @param \Crankycyclops\DiscountCodeUrl\Helper\Cart $cartHelper
 	 * @param \Magento\SalesRule\Model\Coupon $couponModel
 	 * @param \Magento\SalesRule\Model\Rule $ruleModel
-	 * @param \Magento\Framework\Registry $registry
 	 * @param \Magento\Checkout\Model\Session $checkoutSession
 	 */
 	public function __construct(
@@ -73,8 +84,8 @@ class FrontControllerInterface {
 		\Crankycyclops\DiscountCodeUrl\Helper\Cart $cartHelper,
 		\Magento\SalesRule\Model\Coupon $couponModel,
 		\Magento\SalesRule\Model\Rule $ruleModel,
-		\Magento\Framework\Registry $registry,
-		\Magento\Checkout\Model\Session $checkoutSession
+		\Magento\Checkout\Model\Session $checkoutSession,
+        Context $context
 	) {
 		$this->request = $request;
 		$this->config = $config;
@@ -82,8 +93,8 @@ class FrontControllerInterface {
 		$this->cartHelper = $cartHelper;
 		$this->couponModel = $couponModel;
 		$this->ruleModel = $ruleModel;
-		$this->registry = $registry;
 		$this->checkoutSession = $checkoutSession;
+		$this->messageManager = $context->getMessageManager();
 	}
 
 	/************************************************************************/
@@ -159,26 +170,20 @@ class FrontControllerInterface {
 
 						// Discount code is expired
 						if ($expirationDay && strtotime($expirationDay) < $today) {
-							$this->registry->register('crankycyclops_discounturl_message', [
-								'message' => __($expiredMessage),
-								'error' => true
-							]);
+							$this->discounturlMessage = __($expiredMessage);
+							$this->discounturlError = true;
 						}
 
 						// Discount hasn't started yet
 						else if ($startDay && strtotime($startDay) > $today) {
-							$this->registry->register('crankycyclops_discounturl_message', [
-								'message' => __($invalidMessage),
-								'error' => true
-							]);
+							$this->discounturlMessage = __($invalidMessage);
+							$this->discounturlError = true;
 						}
 
 						// Coupon has already been fully consumed
 						else if ($maxUses && $numUses >= $maxUses) {
-							$this->registry->register('crankycyclops_discounturl_message', [
-								'message' => __($consumedMessage),
-								'error' => true
-							]);
+							$this->discounturlMessage = __($consumedMessage);
+                            $this->discounturlError = true;
 						}
 
 						else {
@@ -207,27 +212,21 @@ class FrontControllerInterface {
 							// controller_front_send_response_before. You
 							// don't know how many hours I pulled my hair
 							// out figuring this out...
-							$this->registry->register('crankycyclops_discounturl_coupon', $coupon);
-							$this->registry->register('crankycyclops_discounturl_message', [
-								'message' => __($successMessage),
-								'error' => false
-							]);
+							$this->discounturlCoupon = $coupon;
+							$this->discounturlMessage = __($successMessage);
+							$this->discounturlError = false;
 						}
 					}
 
 					else {
-						$this->registry->register('crankycyclops_discounturl_message', [
-							'message' => __($invalidMessage),
-							'error' => true
-						]);
+						$this->discounturlMessage = __($invalidMessage);
+						$this->discounturlError = true;
 					}
 				}
 
 				else {
-					$this->registry->register('crankycyclops_discounturl_message', [
-						'message' => __($invalidMessage),
-						'error' => true
-					]);
+					$this->discounturlMessage = __($invalidMessage);
+					$this->discounturlError = true;
 				}
 			}
 		}
@@ -256,16 +255,25 @@ class FrontControllerInterface {
 
 			// If a quote already exists, apply the
 			// discount automatically (if possible)
-			$coupon = $this->registry->registry('crankycyclops_discounturl_coupon');
-
-			if ($coupon && $this->checkoutSession->hasQuote()) {
+			if ($this->discounturlCoupon && $this->checkoutSession->hasQuote()) {
 				$this->cartHelper->applyCoupon(
 					$this->checkoutSession->getQuote(),
-					$coupon
+                    $this->discounturlCoupon
 				);
 			}
-		}
 
+            if ($this->discounturlCoupon) {
+                $this->cookieHelper->setCookie($this->discounturlCoupon);
+            }
+
+            if ($this->discounturlMessage) {
+                if ($this->discounturlError) {
+                    $this->messageManager->addError($this->discounturlMessage);
+                } else {
+                    $this->messageManager->addSuccess($this->discounturlMessage);
+                }
+            }
+		}
 		return $result;
 	}
 }
