@@ -40,9 +40,10 @@ It's also a good idea to clear your cache.
 
 Config options can be found in Stores -> Configuration -> Customers -> Promotions -> Discount URL Settings
 
-## Authors
+## Contributors
 
-James Colannino - [crankycyclops](https://github.com/crankycyclops)
+James Colannino (author) - [crankycyclops](https://github.com/crankycyclops)
+Vladimir Bratukhin - [vo1](https://github.com/vo1)
 
 ## License
 
