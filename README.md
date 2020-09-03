@@ -42,8 +42,8 @@ Config options can be found in Stores -> Configuration -> Customers -> Promotion
 
 ## Contributors
 
-James Colannino (author) - [crankycyclops](https://github.com/crankycyclops)
-Vladimir Bratukhin - [vo1](https://github.com/vo1)
+- James Colannino (author) - [crankycyclops](https://github.com/crankycyclops)
+- Vladimir Bratukhin - [vo1](https://github.com/vo1)
 
 ## License
 
