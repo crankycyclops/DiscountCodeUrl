@@ -59,9 +59,9 @@ Want to fix a bug or implement a feature? If so, I'm very receptive to issues an
 
 5. **Avoid frivolous changes.** Frivolous changes include but are not limited to: needlessly altering the whitespace of surrounding code; renaming classes, functions, and variables without a good reason (this has the potential to introduce bugs); and altering the style of existing code just because you have different preferences.
 
-6. **For new functionality, consider creating an issue first so we can talk about it.** If you want to implement a new feature and skip straight to the PR, that's fine, but I might not want to merge it, which would be sad if you put a lot of work into it.
+6. **For new functionality, consider creating an issue first with the "feature request" label so we can talk about it.** If you want to implement a new feature and skip straight to the PR, that's fine, but I might not want to merge it, which would be sad if you put a lot of work into it.
 
-7. **Be nice.** If you're rude, argumentative, or combative, I'm not going to deal with you. Open source is a collaborative experience and should be an enjoyable experience for everyone.
+7. **Be nice.** If you're rude, argumentative, or combative, I'm not going to deal with you. Open source is a collaborative experience and should be enjoyable for everyone.
 
 ## License
 
