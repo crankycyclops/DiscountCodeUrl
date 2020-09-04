@@ -47,9 +47,9 @@ Config options can be found in Stores -> Configuration -> Customers -> Promotion
 
 ## How to Contribute
 
-Want to fix a bug or implement a feature? If so, I'm very receptive to issues and PRs. I only ask that you observe the following guidelines:
+Want to fix a bug or implement a feature? If so, first and foremost, **THANK YOU!** It's incredible that there are people out there who find my code useful enough to contribute and I'm deeply grateful for your willingness to make this module better. As a rule, I'm very receptive to issues and PRs. I only ask that you observe the following guidelines:
 
-1. **Be conservative and avoid making changes to existing code unless you're fixing something that's broken.** You might find a more elegant way to implement existing behavior, but doing so has the potential to introduce new bugs, and until the day comes when I no longer have a full-time job to worry about, I won't have time to perform a lot of additional regression testing. I rely on this module for my own production environment and I will always value stability over elegance.
+1. **Be conservative and avoid making changes to existing code unless you're fixing something that's broken.** You might find a more elegant way to implement existing behavior, but doing so has the potential to introduce new bugs, and until the day comes when I no longer have a full-time job to worry about, I won't have time to perform a lot of additional regression testing. I rely on this module for my own production environment and will always value stability over elegance.
 
 2. **Respect the existing code style.** I know I don't adhere to the PSR-2 guidelines that are preferred by Magento and many others. This will make people groan, but I have my own K&R-like style that I find more comfortable, and while I've chosen to open source this module to benefit others, I still want to enjoy working with my own code.
 
