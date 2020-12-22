@@ -49,20 +49,19 @@ class Cart extends \Magento\Framework\App\Helper\AbstractHelper {
 
 		catch (LocalizedException $e) {
 			$this->messageManager->addError(
-				__("Discount code <strong>$coupon</strong> couldn't be applied: " .
-					$e->getMessage())
+				__("Discount code <strong>%1</strong> couldn't be applied: %2",$coupon,$e->getMessage())
 			);
 		}
 
 		catch (\Exception $e) {
 			$this->messageManager->addError(
-				__("Discount code <strong>$coupon</strong> couldn't be applied or is invalid")
+				__("Discount code <strong>%1</strong> couldn't be applied or is invalid",$coupon)
 			);
 		}
 
 		if ($quote->getCouponCode() != $coupon) {
 			$this->messageManager->addError(
-				__("Discount code <strong>$coupon</strong> is invalid. Verify that it's correct and try again.")
+				__("Discount code <strong>%1</strong> is invalid. Verify that it's correct and try again.",$coupon)
 			);
 		}
 	}
