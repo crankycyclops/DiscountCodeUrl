@@ -45,6 +45,7 @@ Config options can be found in Stores -> Configuration -> Customers -> Promotion
 - James Colannino (author) - [crankycyclops](https://github.com/crankycyclops)
 - Vladimir Bratukhin - [vo1](https://github.com/vo1)
 - Hidayet Ok - [hidonet](https://github.com/hidonet)
+- Terrapin - [TerrapinSoftware](https://github.com/TerrapinSoftware)
 
 ## How to Contribute
 
