@@ -85,9 +85,9 @@ class ControllerFrontSendResponseBefore implements \Magento\Framework\Event\Obse
 
 			if ($message) {
 				if ($message['error']) {
-					$this->messageManager->addError($message['message']);
+					$this->messageManager->addErrorMessage($message['message']);
 				} else {
-					$this->messageManager->addSuccess($message['message']);
+					$this->messageManager->addSuccessMessage($message['message']);
 				}
 			}
 		}

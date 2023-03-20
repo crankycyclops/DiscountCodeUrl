@@ -183,17 +183,19 @@ class FrontControllerInterface {
 
 						else {
 
-							$successMessage = "Discount code <strong>$coupon</strong> will be applied to your order during checkout";
+							$successMessage = 'Discount code <strong>%1</strong> will be applied to your order during checkout';
+                            $args = [$coupon];
 
 							if ($usesPerCustomer && $usesPerCustomer > 0) {
 
 								if ($usesPerCustomer > 1) {
-									$successMessage .= " unless you've already fully consumed it (code is only valid for up to $usesPerCustomer orders";
+									$successMessage .= ' unless you\'ve already fully consumed it (code is only valid for up to %2 orders';
+                                    $args[] = $usesPerCustomer;
 								} else {
-									$successMessage .= " unless you've already used it (code is only valid for one order";
+									$successMessage .= ' unless you\'ve already used it (code is only valid for one order';
 								}
 
-								$successMessage .= " per customer)";
+								$successMessage .= ' per customer)';
 							}
 
 							// As documented in
@@ -209,7 +211,7 @@ class FrontControllerInterface {
 							// out figuring this out...
 							$this->registry->register('crankycyclops_discounturl_coupon', $coupon);
 							$this->registry->register('crankycyclops_discounturl_message', [
-								'message' => __($successMessage),
+								'message' => __($successMessage, $args),
 								'error' => false
 							]);
 						}
